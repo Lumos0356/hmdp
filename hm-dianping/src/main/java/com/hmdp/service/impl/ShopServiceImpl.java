@@ -1,6 +1,5 @@
 package com.hmdp.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
@@ -12,14 +11,12 @@ import com.hmdp.service.IShopService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hmdp.utils.RedisConstants;
 import com.hmdp.utils.RedisData;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -99,10 +96,10 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
         String lockKey = RedisConstants.LOCK_SHOP_KEY + id;
         Shop shop = null;
         try {
-            boolean islock = trylock(lockKey);
+            boolean isLock = tryLock(lockKey);
             // 4.2判断是否获取锁
             // TODO 递归实现，可能存在爆栈风险
-            if (!islock) {
+            if (!isLock) {
                 // 4.3失败，则休眠并重试
                 Thread.sleep(50);
                 return queryWithMutex(id);
@@ -151,7 +148,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
         // 6.缓存重建
         // 6.1获取互斥锁
         String lockKey = RedisConstants.LOCK_SHOP_KEY + id;
-        boolean isLock = trylock(lockKey);
+        boolean isLock = tryLock(lockKey);
         // 6.2判断是否获取锁
         if (isLock) {
             // 6.3获取成功，开启独立线程，实现缓存重建
@@ -169,7 +166,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
         // 7返回过期的商铺信息
         return shop;
     }
-    private boolean trylock(String key) {
+    private boolean tryLock(String key) {
         Boolean flag = stringRedisTemplate.opsForValue().setIfAbsent(key, "1", 10, TimeUnit.SECONDS);
 //        return flag;   // 不能直接返回基本类型，flag拆箱后可能结果为null
         return BooleanUtil.isTrue(flag); // 如果flag为null或者false都返回false
