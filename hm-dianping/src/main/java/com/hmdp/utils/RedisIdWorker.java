@@ -18,7 +18,8 @@ public class RedisIdWorker {
     public long nextId(String keyPrefix) {
         // 1.生成时间戳
         LocalDateTime now = LocalDateTime.now();
-        long timeStamp = now.toEpochSecond(ZoneOffset.UTC);
+        long nowSecond = now.toEpochSecond(ZoneOffset.UTC);
+        long timeStamp = BEGIN_TIMESTAMP - nowSecond;
         // 2.生成序列号
         String date = now.format(DateTimeFormatter.ofPattern("yyyy:MM:dd"));
         Long count = stringRedisTemplate.opsForValue().increment("icr:" + keyPrefix + ":" + date);
