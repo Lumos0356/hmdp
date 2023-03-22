@@ -5,7 +5,7 @@ spring:
     name: list
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/word?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://127.0.0.1:3306/words?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: 123
   redis:
@@ -19,9 +19,9 @@ spring:
         min-idle: 1
         time-between-eviction-runs: 10s
   jackson:
-    default-property-inclusion: non_null # JSON?????????
-#mybatis-plus:
-#  type-aliases-package: com.hmdp.entity # ?????
+    default-property-inclusion: non_null
+mybatis-plus:
+  type-aliases-package: cn.lumos.entity
 logging:
   level:
     cn.lumos: debug
@@ -29,4 +29,4 @@ logging:
 chatgpt:
   api:
     url: https://open.aiproxy.xyz/v1/completions
-    apiKey: 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
+    apiKey: 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

@@ -1,4 +1,4 @@
-package cn.lumos.wordreview.entity;
+package cn.lumos.wordreview.entity.ai;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

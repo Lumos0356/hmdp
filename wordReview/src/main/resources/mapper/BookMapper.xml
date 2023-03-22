@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lumos.wordreview.mapper.BookMapper">
+    <resultMap id="wordResultMap" type="cn.lumos.wordreview.entity.words.Word">
+        <id column="oId" property="oId"/>
+        <result column="word" property="word"/>
+        <result column="name" property="name"/>
+        <result column="pronunciation" property="pronunciation"/>
+        <collection property="phrases" ofType="java.lang.String">
+            <result column="phrase"/>
+        </collection>
+    </resultMap>
+
+    <select id="getWordsForBook" resultMap="wordResultMap">
+        SELECT voc.original_id as oId,
+               voc.vc_vocabulary as word,
+               voc.vc_interpretation as name,
+               voc.vc_phonetic_uk as pronunciation,
+               CONCAT(pr.phrase, ' ', pr.interpretation) as phrase
+        FROM VOC_TB AS voc
+                 JOIN BK_VOC_TB AS bktb ON voc.original_id = bktb.voc_id
+                 LEFT JOIN PR_TB AS pr ON voc.vc_id = pr.voc_id
+        WHERE bktb.book_id = #{bookId}
+        ORDER BY oId
+    </select>
+</mapper>

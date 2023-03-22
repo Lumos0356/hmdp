@@ -1,7 +1,7 @@
 package cn.lumos.wordreview.controller;
 
 import cn.lumos.wordreview.dto.Result;
-import cn.lumos.wordreview.entity.AIQuestion;
+import cn.lumos.wordreview.entity.ai.AIQuestion;
 import cn.lumos.wordreview.service.IChatGPTService;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +15,6 @@ public class ChatGPTController {
 
     @PostMapping("/ask")
     public Result ask(@RequestBody AIQuestion question) {
-        return service.ask(question);
+        return service.ask(question.getMsg());
     }
 }
