@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+
+/wordReview/src/main/resources/db/words.sql
