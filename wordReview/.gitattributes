@@ -1,0 +1,1 @@
+wordReview/src/main/resources/db/words.sql filter=lfs diff=lfs merge=lfs -text
